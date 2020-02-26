@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TELESCOPE • ISS Position</title>
+    <meta name="description" content="ISS Position">
+    <meta content='width=device-width, initial-scale=1.0' name='viewport' />
+    
+    <link rel="shortcut icon" type="image/png" href="https://assets.gitlab-static.net/uploads/-/system/project/avatar/3673123/sdsd.png?width=40"/>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap');
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'Quicksand';
+            font-size: 20px;
+        }
+
+        #issMap {
+            height: 500px;
+            margin: 20px;
+        }
+
+        .back-to-homepage {
+            color: white;
+        }
+
+        .fa-arrow-left {
+            padding: 40px;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+    
+    <a href="http://nasa.planetcode.fr" class="back-to-homepage">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <p style="text-align: center;margin-top:-30px;">ISS Position</p>
+
+    <div id="issMap"></div>
+
+    <div style="text-align: center">
+
+        <p style="opacity:0.7;font-size:14px;">
+            Latitude : <span id="lat"></span>°
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            Longitude : <span id="lon"></span>°
+        </p>
+
+    </div>
+
+
+    <script>
+        //Getting Data from API https://wheretheiss.at/w/developer
+        // Tuto The Coding Train https://www.youtube.com/watch?v=nZaZ2dB6pow
+        //Voir aussi démo : https://codepen.io/JagannathArumugam/pen/dBMXQQ?editors=1010
+
+        // Making a map and tiles
+
+        const mymap = L.map('issMap').setView([0, 0], 3);
+
+        const attribution =
+            'Tiles &copy; Esri';
+
+        const tileUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+
+        const tiles = L.tileLayer(tileUrl, {
+            attribution
+        });
+
+        tiles.addTo(mymap);
+
+
+        //Making marker and a custom Icon
+
+        const issIcon = L.icon({
+            iconUrl: 'IssVectorWhite1.png',
+            iconSize: [50, 32],
+            iconAnchor: [25, 16]
+
+        });
+
+        let marker = L.marker([0, 0], {
+            icon: issIcon
+        }).addTo(mymap);
+
+
+        const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
+
+
+        async function getISS() {
+
+            const response = await fetch(api_url);
+
+            const data = await response.json();
+
+            const {
+                latitude,
+                longitude
+            } = data;
+
+            //L.marker([latitude, longitude]).addTo(mymap);
+
+            // Always set the view to current lat lon and zoom!
+            mymap.setView([latitude, longitude], mymap.getZoom());
+
+            marker.setLatLng([latitude, longitude]);
+
+            document.getElementById('lat').textContent = latitude.toFixed(1);
+
+            document.getElementById('lon').textContent = longitude.toFixed(3);
+
+            //console.log(latitude);
+
+            //console.log(longitude);
+
+        }
+
+        getISS();
+
+        //To update Position on map
+        setInterval(getISS, 1000);
+
+    </script>
+
+
+
+</body>
+
+</html>
