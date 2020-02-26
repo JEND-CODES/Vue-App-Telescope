@@ -1,4 +1,4 @@
-# Application Vue.js d'exploration de données fournies par la NASA
+Application Vue.js d'exploration de données fournies par la NASA
 
 Démo => http://nasa.planetcode.fr
 
