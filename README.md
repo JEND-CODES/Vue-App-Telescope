@@ -1,6 +1,6 @@
-# nasa
+# Application Vue.js d'exploration de données fournies par la NASA
 
-> nasa
+Démo => http://nasa.planetcode.fr
 
 ## Build Setup
 
