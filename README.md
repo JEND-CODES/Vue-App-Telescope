@@ -2,6 +2,8 @@ Application Vue.js d'exploration de données fournies par la NASA
 
 Démo => http://nasa.planetcode.fr
 
+![NASA](http://portfolio.planetcode.fr/img/projects/TelescopeCapcha.png)
+
 ## Build Setup
 
 ``` bash
